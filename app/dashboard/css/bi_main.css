@@ -1,0 +1,246 @@
+/* 全局設定 */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+
+.revenue-summary {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    margin-bottom: 20px;
+}
+
+.revenue-card {
+    flex: 1 1 calc(20% - 20px);
+    background-color: #f8f9fa;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    min-width: 150px;
+    text-align: center;
+}
+
+.revenue-title {
+    font-size: 1rem;
+    color: #555;
+    margin-bottom: 10px;
+}
+
+.revenue-amount {
+    font-size: 1.8rem;
+    font-weight: bold;
+    color: #007bff;
+}
+
+/* 側邊欄樣式 */
+.sidebar {
+    width: 250px;
+    min-width: 70px;
+    max-width: 400px;
+    height: 100vh;
+    background: #2C3E50;
+    color: white;
+    position: fixed;
+    top: 0;
+    left: 0;
+    transition: width 0.3s ease-in-out;
+    overflow-x: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+/* 側邊欄收起時 */
+.sidebar.collapsed {
+    width: 70px;
+}
+
+/* 標題與按鈕 */
+.sidebar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px;
+    background: #1A252F;
+}
+
+.sidebar-header h2 {
+    font-size: 1.2rem;
+}
+
+#toggle-btn {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+/* 側邊欄選單 */
+.menu {
+    list-style: none;
+    padding: 10px 0;
+    flex-grow: 1;
+}
+
+.menu li {
+    padding: 10px 20px;
+}
+
+.menu li a {
+    color: white;
+    text-decoration: none;
+    display: block;
+    transition: background 0.3s;
+}
+
+.menu li a:hover {
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 5px;
+}
+
+/* 子選單 */
+.submenu {
+    list-style: none;
+    padding-left: 20px;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease-out;
+}
+
+.submenu.open {
+    max-height: 200px;
+}
+
+/* 頂部導航欄 */
+.navbar {
+    height: 60px;
+    background: #2C3E50;
+    color: white;
+    display: flex;
+    align-items: center;
+    padding-left: 250px;
+    transition: padding-left 0.3s ease-in-out;
+}
+
+.navbar h1 {
+    font-size: 1.5rem;
+    padding-left: 20px;
+}
+
+/* 內容區域 */
+.content {
+    margin-left: 250px;
+;
+    padding: 20px;
+    transition: margin-left 0.3s ease-in-out;
+}
+
+/* 側邊欄收起時，內容區域調整 */
+.sidebar.collapsed + .navbar {
+    padding-left: 70px;
+}
+
+.sidebar.collapsed + .navbar + .content {
+    margin-left: 70px;
+}
+
+/* 側邊欄縮放區 */
+.resize-handle {
+    width: 5px;
+    background: #1A252F;
+    cursor: ew-resize;
+    position: absolute;
+    top: 0;
+    right: 0;
+}
+.add-block-button {
+  display: block;
+  margin: 10px auto 30px;
+  padding: 10px 24px;
+  font-size: 16px;
+  background-color: #3498db;
+  border: none;
+  color: white;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.25s ease;
+}
+
+/* --- 子選單樣式 --- */
+.submenu {
+    list-style: none;
+    padding-left: 20px;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease-out;
+    position: relative; /* 避免收起時位置異常 */
+}
+
+/* 當子選單展開時 */
+.submenu.open {
+    max-height: 500px;
+}
+
+/* 側邊欄收起時，子選單改為浮動 */
+.sidebar.collapsed .submenu {
+    position: absolute;
+    left: 70px;
+    top: 0;
+    background: #34495E;
+    width: 180px;
+    padding: 10px 0;
+    border-radius: 5px;
+    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2);
+    display: none;
+}
+
+/* 滑鼠懸停時自動顯示子選單 */
+.sidebar.collapsed .has-submenu:hover .submenu {
+    display: block;
+}
+
+
+
+
+
+/* --- RWD 響應式設計 --- */
+@media (max-width: 768px) {
+    .sidebar {
+        width: 70px;
+    }
+
+    .sidebar.collapsed {
+        width: 0;
+    }
+
+    .navbar {
+        padding-left: 70px;
+    }
+
+    .content {
+        margin-left: 70px;
+    }
+
+    /* 手機模式下的子選單 */
+    .sidebar.collapsed .submenu {
+        position: static;
+        width: 100%;
+        display: block;
+        background: #1A252F;
+        box-shadow: none;
+    }
+
+    .submenu.open {
+        max-height: 500px; /* 手機模式時允許完全展開 */
+    }
+
+    /* 讓子選單在 RWD 下正常顯示 */
+    .has-submenu .submenu {
+        display: block;
+        max-height: none;
+    }
+}

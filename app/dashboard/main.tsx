@@ -1,18 +1,74 @@
+'use client';
 
+import "./css/bi_main.css";
+import DynamicDiv from './dynamicDiv';
+import { rectSortingStrategy } from '@dnd-kit/sortable';
 
+import {
+  DndContext,
+  closestCenter,
+  PointerSensor,
+  useSensor,
+  useSensors,
+} from '@dnd-kit/core';
 
+import {
+  SortableContext,
+  useSortable,
+  arrayMove,
+  verticalListSortingStrategy,
+} from '@dnd-kit/sortable';
 
-export default function mainBlocks() {
-  // const [blocks, setBlocks] = useState<Block[]>([
-  //   { id: 'block-1', color: '#00BFFF' },
-  //   { id: 'block-2', color: '#FF69B4' },
-  //   { id: 'block-3', color: '#32CD32' },
-  // ]);
+import { CSS } from '@dnd-kit/utilities';
+import { useState } from 'react';
+import React from 'react';
 
-  // const sensors = useSensors(useSensor(PointerSensor));
+// 型別定義
+type Block = {
+  id: string;
+  title: string;
+  amount: string;
+  color?: string;
+};
+
+// SortableItem 支援 children 的版本
+function SortableItem({ id, children }: { id: string; children: React.ReactNode }) {
+  const {
+    attributes,
+    listeners,
+    setNodeRef,
+    transform,
+    transition,
+  } = useSortable({ id });
+
+  const style: React.CSSProperties = {
+    transform: CSS.Transform.toString(transform),
+    transition,
+    cursor: 'grab',
+  };
 
   return (
-    <body>
+    <div ref={setNodeRef} style={style} {...attributes} {...listeners}>
+      {children}
+    </div>
+  );
+}
+
+// 主組件
+export default function MainBlocks() {
+  const [blocks, setBlocks] = useState<Block[]>([
+    { id: '1', title: '今日營收555', amount: '$12,345' },
+    { id: '2', title: '本週營收', amount: '$67,890' },
+    { id: '3', title: '本月累積營收', amount: '$123,456' },
+    { id: '4', title: '上月累積營收', amount: '$123,456' },
+    { id: '5', title: '年度累積營收', amount: '$123,456' },
+  ]);
+
+  const sensors = useSensors(useSensor(PointerSensor));
+
+  return (
+    <>
+      {/* 側邊欄 */}
       <div className="sidebar">
         <div className="sidebar-header">
           <h2>儀表板</h2>
@@ -41,90 +97,68 @@ export default function mainBlocks() {
         <div className="resize-handle"></div>
       </div>
 
+      {/* 導覽列 */}
       <div className="navbar">
         <h1>商用儀表板</h1>
       </div>
 
+      {/* 主要內容區 */}
       <div className="content">
-        <div className="revenue-summary">
-          <div className="revenue-card">
-            <div className="revenue-title">今日營收</div>
-            <div className="revenue-amount">$12,345</div>
-          </div>
-          <div className="revenue-card">
-            <div className="revenue-title">本週營收</div>
-            <div className="revenue-amount">$67,890</div>
-          </div>
-          <div className="revenue-card">
-            <div className="revenue-title">本月累積營收</div>
-            <div className="revenue-amount">$123,456</div>
-          </div>
-          <div className="revenue-card">
-            <div className="revenue-title">上月累積營收</div>
-            <div className="revenue-amount">$123,456</div>
-          </div>
-          <div className="revenue-card">
-            <div className="revenue-title">年度累積營收</div>
-            <div className="revenue-amount">$123,456</div>
-          </div>
+        <DndContext
+          sensors={sensors}
+          collisionDetection={closestCenter}
+          onDragEnd={({ active, over }) => {
+            if (!over || active.id === over.id) return;
 
-          <h2>歡迎來到儀表板</h2>
-          <p>這裡是你的商業數據分析中心。</p>
+            const oldIndex = blocks.findIndex((b) => b.id === active.id);
+            const newIndex = blocks.findIndex((b) => b.id === over.id);
 
-
-        </div>
+            if (oldIndex !== -1 && newIndex !== -1) {
+              setBlocks((items) => arrayMove(items, oldIndex, newIndex));
+            }
+          }}
+        >
+          <SortableContext items={blocks.map((b) => b.id)} strategy={rectSortingStrategy}>
+            <div className="revenue-summary grid grid-cols-1 gap-4 p-6 " >
+              {blocks.map((block) => (
+                <SortableItem key={block.id} id={block.id}>
+                  <div
+                    className="revenue-card"
+                    style={{
+                      width: 300,
+                      height: 150,
+                      backgroundColor: block.color,
+                      borderRadius: 16,
+                      boxShadow: '0 4px 10px rgba(0,0,0,0.2)',
+                      padding: 20,
+                      color: 'white',
+                      fontSize: 20,
+                      display: 'flex',
+                      flexDirection: 'column',
+                      justifyContent: 'center',
+                    }}
+                  >
+                    <div className="revenue-title">{block.title}</div>
+                    <div className="revenue-amount mt-2">{block.amount}</div>
+                  </div>
+                </SortableItem>
+              ))}
+            </div>
+          </SortableContext>
+          <button className="add-block-button"
+            // onClick={addBlock}
+            onMouseOver={(e) => {
+              (e.currentTarget.style.backgroundColor = '#2980b9');
+            }}
+            onMouseOut={(e) => {
+              (e.currentTarget.style.backgroundColor = '#3498db');
+            }}
+          >
+            新增區塊
+          </button>
+        </DndContext>
       </div>
-    </body>
-
+      <DynamicDiv />
+    </>
   );
 }
-
-
-
-
-
-
-// <script>
-// document.addEventListener("DOMContentLoaded", function () {
-//     const sidebar = document.querySelector(".sidebar");
-//     const toggleBtn = document.getElementById("toggle-btn");
-//     const resizeHandle = document.querySelector(".resize-handle");
-//     const submenuItems = document.querySelectorAll(".has-submenu > a");
-
-//     // 側邊欄折疊
-//     toggleBtn.addEventListener("click", function () {
-//         sidebar.classList.toggle("collapsed");
-//     });
-
-//     // 可調整側邊欄寬度
-//     let isResizing = false;
-//     resizeHandle.addEventListener("mousedown", function (e) {
-//         isResizing = true;
-//         document.addEventListener("mousemove", resize);
-//         document.addEventListener("mouseup", stopResize);
-//     });
-
-//     function resize(e) {
-//         if (isResizing) {
-//             let newWidth = Math.max(70, Math.min(400, e.clientX));
-//             sidebar.style.width = newWidth + "px";
-//         }
-//     }
-
-//     function stopResize() {
-//         isResizing = false;
-//         document.removeEventListener("mousemove", resize);
-//         document.removeEventListener("mouseup", stopResize);
-//     }
-
-//     // 子選單展開/收起
-//     submenuItems.forEach(item => {
-//         item.addEventListener("click", function (e) {
-//             e.preventDefault();
-//             this.nextElementSibling.classList.toggle("open");
-//         });
-//     });
-// });
-
-
-// </script>
