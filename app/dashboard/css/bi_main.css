@@ -22,7 +22,7 @@
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
     min-width: 150px;
     text-align: center;
-}
+}   
 
 .revenue-title {
     font-size: 1rem;
@@ -77,6 +77,10 @@
     color: white;
     font-size: 20px;
     cursor: pointer;
+}
+.middle-function-body{
+    margin-left: 0px;
+    size: 10cp;
 }
 
 /* 側邊欄選單 */
@@ -134,10 +138,10 @@
 /* 內容區域 */
 .content {
     margin-left: 250px;
-;
     padding: 20px;
     transition: margin-left 0.3s ease-in-out;
 }
+
 
 /* 側邊欄收起時，內容區域調整 */
 .sidebar.collapsed + .navbar {

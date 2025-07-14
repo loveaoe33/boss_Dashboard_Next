@@ -2,6 +2,8 @@
 
 import "./css/bi_main.css";
 import DynamicDiv from './dynamicDiv';
+import FunctionDiv from "./functionDive";
+
 import { rectSortingStrategy } from '@dnd-kit/sortable';
 
 import {
@@ -144,21 +146,18 @@ export default function MainBlocks() {
                 </SortableItem>
               ))}
             </div>
+
+
           </SortableContext>
-          <button className="add-block-button"
-            // onClick={addBlock}
-            onMouseOver={(e) => {
-              (e.currentTarget.style.backgroundColor = '#2980b9');
-            }}
-            onMouseOut={(e) => {
-              (e.currentTarget.style.backgroundColor = '#3498db');
-            }}
-          >
-            新增區塊
-          </button>
         </DndContext>
+        <div className="middle-function-body">
+          <FunctionDiv />
+        </div>
+        <div className="middel-chart-body">
+
+        </div>
       </div>
-      <DynamicDiv />
+
     </>
   );
 }
