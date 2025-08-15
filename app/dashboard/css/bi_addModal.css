@@ -1,0 +1,100 @@
+
+.addModal-body {
+    font-family: "Microsoft JhengHei", sans-serif;
+    margin: 0; padding: 0;
+    background: #f9f9f9;
+  }
+  .addModal-container {
+    max-width: 960px;
+    margin: 30px auto;
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgb(0 0 0 / 0.1);
+  }
+  .addModal-controls {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+    margin-bottom: 20px;
+  }
+  .addModal-filter-section {
+    flex: 1 1 250px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    padding: 15px;
+    background: #fdfdfd;
+  }
+  .addModal-filter-section h3 {
+    margin-top: 0;
+    font-weight: 600;
+    margin-bottom: 10px;
+  }
+  .addModal-filter-section label {
+    display: block;
+    margin-bottom: 8px;
+    cursor: pointer;
+  }
+  .addModal-filter-section input[type=checkbox] {
+    margin-right: 8px;
+  }
+  .addModal-filter-section select, input[type=date] {
+    font-size: 1rem;
+    padding: 6px 10px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+    width: 100%;
+    box-sizing: border-box;
+    margin-bottom: 10px;
+  }
+  .date-range {
+    display: flex;
+    gap: 10px;
+  }
+  .date-range input {
+    flex: 1;
+  }
+  .addModal-chart-container {
+    width: 100%;
+  }
+
+
+  .addModal-modal {
+  width: 1000px;
+  height: 600px;
+  max-width: 90vw; /* 讓它在螢幕太小時自適應 */
+  max-height: 90vh;
+  margin: auto;
+  background: white; /* 確保背景 */
+  border-radius: 8px; /* 可選 */
+  padding: 20px; /* 可選 */
+  overflow: auto; /* 內容超出時可以滾動 */
+  position: relative; /* 依照你的需求調整 */
+}
+
+
+.plus-Button {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background-color: #4caf50; /* 綠色調 */
+    color: white;
+    font-size: 28px;
+    font-weight: bold;
+    border: none;
+    cursor: pointer;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .plus-button:hover {
+    background-color: #45a049;
+    transform: scale(1.1);
+  }
+  .plus-button:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.5);
+  }
+

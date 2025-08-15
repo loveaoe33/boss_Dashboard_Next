@@ -9,6 +9,18 @@ type BlockType = {
 };
 
 export default function MainBlocks() {
+  const [todayAmount, setTodayAmount] = useState(0);
+  const [weekAmount, setWeelAmount] = useState(0);
+  const [monthAmount, setMonthAmount] = useState(0);
+  const [lastMonthAmount, setLastMonthAmount] = useState(0);
+  const [yearAmount, setYearAmount] = useState(0);
+
+  
+
+
+
+
+
   const [blocks, setBlocks] = useState<BlockType[]>([
     { id: 1, title: '區塊 1' },
     { id: 2, title: '區塊 2' },

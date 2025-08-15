@@ -2,7 +2,8 @@
 
 import "./css/bi_main.css";
 import DynamicDiv from './dynamicDiv';
-import FunctionDiv from "./functionDive";
+import FunctionDiv from "./functionDiv";
+import AddModal from "./modal/addModal";
 
 import { rectSortingStrategy } from '@dnd-kit/sortable';
 
@@ -56,6 +57,45 @@ function SortableItem({ id, children }: { id: string; children: React.ReactNode 
   );
 }
 
+
+export type dateObject = {
+  startDate: string;
+  endEdate: string;
+  compareStartDate: string;
+  compareEndDate: string;
+}
+
+export type selectObject = {
+  sqlCheckbox: string[];
+  chartType: string;
+  compareRadio: string;
+  compareType: dateObject;
+}
+
+export type initModalCase = {
+  checkbox: string[];
+  chartType: string[];
+}
+
+
+
+export const initialSelectObject: selectObject = {
+  sqlCheckbox: [],
+  chartType: "",
+  compareRadio: "",
+  compareType: {
+    startDate: "",
+    endEdate: "",
+    compareStartDate: "",
+    compareEndDate: "",
+  },
+};
+
+export const initalModalCase: initModalCase = {
+  checkbox: ["A", "B", "C"],
+  chartType: ["line", "bar", "pie"]
+}
+
 // 主組件
 export default function MainBlocks() {
   const [blocks, setBlocks] = useState<Block[]>([
@@ -66,8 +106,41 @@ export default function MainBlocks() {
     { id: '5', title: '年度累積營收', amount: '$123,456' },
   ]);
 
-  const sensors = useSensors(useSensor(PointerSensor));
+  const dateCompare = (dates: dateObject) => {   //compare dates
+    const startDate = new Date(dates.startDate);
+    const endEdate = new Date(dates.endEdate);
+    const compareStartDate = new Date(dates.compareStartDate);
+    const compareEndDate = new Date(dates.compareEndDate);
 
+    if (isNaN(startDate.getTime()) || isNaN(endEdate.getTime()) || isNaN(compareStartDate.getTime()) || isNaN(compareEndDate.getTime())) {
+      return false; // if date Format is invalid return false
+    }
+
+    // 檢查起始日期不能大於結束日期
+    if (startDate > endEdate) return false;
+    if (compareStartDate > compareEndDate) return false;
+
+    return true; // 通過檢查
+
+  }
+
+  const clearSelectObject = ():void=> {
+    setselectObjectData(initialSelectObject);
+  }
+
+  const addTempSelectObject = ():void=> {
+     const jsonString=JSON.stringify(selectObjectData);
+     clearSelectObject();
+     setPostJson(jsonString);
+
+  }
+
+
+  const [selectObjectData, setselectObjectData] = useState<selectObject>(initialSelectObject);
+  const [sqlWhere, setSqlWhere] = useState<initModalCase>(initalModalCase);
+  const [postJson, setPostJson] = useState<string>("");
+
+  const sensors = useSensors(useSensor(PointerSensor));
   return (
     <>
       {/* 側邊欄 */}
@@ -151,7 +224,8 @@ export default function MainBlocks() {
           </SortableContext>
         </DndContext>
         <div className="middle-function-body">
-          <FunctionDiv />
+          {postJson}
+          <FunctionDiv addTempSelectObject={addTempSelectObject} selectObjectData={selectObjectData} setselectObjectData={setselectObjectData} sqlWhere={sqlWhere}  />
         </div>
         <div className="middel-chart-body">
 

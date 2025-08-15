@@ -4,7 +4,7 @@ import DashboardMain from "./dashboard/main";
 import ChartPage from "./dashboard/testChart"
 import ReChartPage from "./dashboard/testRecharts";
 import LineChartPage from "./dashboard/testLineChart";
-import FunctionDiv from "./dashboard/functionDive";
+import FunctionDiv from "./dashboard/functionDiv";
 export default function Information_Home() {
   return (
     <>
