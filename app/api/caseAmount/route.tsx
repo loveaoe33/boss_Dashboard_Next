@@ -1,60 +1,64 @@
 import { NextResponse } from 'next/server';
 
 interface RequestBody {
-  id: string;
-  hashcode: string;
-  domainUrl: string;
-  header: any;
-  userData: any;
+  account:string;
+  password: string;
+  domainUrl:string;
 }
 
+export interface ReasponseLogin{
+   id: number;
+   account: string; 
+    password: string;
+    token: string;
+    level: number;
+    depart: string;
+    create_date: string;
+}
 // GET Method
-export async function GET(request: Request) {    //get Amount data
-  const { searchParams } = new URL(request.url);
-  const id = searchParams.get('id');
-  const data = {
-    message: 'This is a GET response',
-    id: id || 'no-id-provided',
-    timestamp: new Date().toISOString()
-  };
+export async function GET(request: Request) {   //get chartSQL
+//   const { searchParams } = new URL(request.url);
+//   const id = searchParams.get('id');
+//   const data = {
+//     message: 'This is a GET response',
+//     id: id || 'no-id-provided',
+//     timestamp: new Date().toISOString()
+//   };
 
-  return NextResponse.json(data, { status: 200 });
+//   return NextResponse.json(data, { status: 200 });
 }
 
+// POST Method
+export async function POST(request: Request) {   //login post
+  try {
+    const body = await request.json();   //呼叫時會丟json過來
+    const { account,password,domainUrl}: RequestBody = body;
+    console.log("url:" + domainUrl);
+    const response:any= await fetch(`${domainUrl}/Product_Admin/adminLogin`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        account: account,
+        password: password,
+        token:"",
+        level:"",
+        depart:"",
+        create_date:""
+      })
+    });
+    const data: ReasponseLogin = await response.text();
+        console.log("response:", data);
 
-
-
-// // POST Method
-// export async function POST(request: Request) {   //insert data
-
-//   try {
-//     const body = await request.json();   //呼叫時會丟json過來
-//     const { id, hashcode, domainUrl, header, userData }: RequestBody = body;
-//     console.log("url:" + domainUrl);
-//     const response = await fetch(`${domainUrl}/Product_Imformation/setProduct_Information?caseSelect=marjorCase`, {
-//       method: 'POST',
-//       headers: { 'Content-Type': 'application/json' },
-//       body: JSON.stringify({
-//         type: "Head",
-//         id: id,
-//         hashcode: hashcode,
-//         header: header,
-//         userString: userData,
-//       })
-//     });
-//     const data: string = await response.text();
-//     // return NextResponse.json(data, { status: 201 });
-//     if (!response.ok) throw new Error('Insert API失敗了')
-//     return NextResponse.json({ method: 'POST', sucess: true, message: '新增資料成功', res: data })
-
-//   } catch (error) {
-//     return NextResponse.json(
-//       { error: (error as Error).message },
-//       { status: 400 }
-//     );
-//   }
-// }
-
+    // return NextResponse.json(data, { status: 201 });
+    if (!response.ok) throw new Error('Login API失敗了')
+    return NextResponse.json({ method: 'POST', sucess: true, message: '登入資料成功', res: data })
+  } catch (error) {
+    return NextResponse.json(
+      { error: (error as Error).message },
+      { status: 400 }
+    );
+  }
+}
 
 
 // export async function PUT(request: Request){

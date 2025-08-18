@@ -207,8 +207,19 @@
     display: block;
 }
 
+.middel-chart-body {
+  display: flex;        /* 水平並排 */
+  flex-wrap: wrap;      /* 超出就換行 */
+  gap: 10px;            /* 區塊間距 */
+}
 
-
+.middel-chart-body > * {
+  width: 400px;         /* 固定寬度 */
+  height: 300px;        /* 固定高度 */
+  flex-shrink: 0;       /* 避免被壓縮 */
+  border: 1px solid #ddd; /* (可選) 看得出邊界 */
+  box-sizing: border-box;
+}
 
 
 /* --- RWD 響應式設計 --- */

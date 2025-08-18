@@ -12,14 +12,22 @@ const data = [
 
 const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042'];
 
+
+type props={
+   title: string;
+   compare: boolean;
+   compareType:string;
+   data:string;
+}
+
 export default function PieChartExample() {
   return (
-    <PieChart width={400} height={300}>
+    <PieChart width={800} height={600}>
       <Pie
         data={data}
         cx="50%"
         cy="50%"
-        outerRadius={100}
+        outerRadius={250}
         fill="#8884d8"
         dataKey="value"
         label

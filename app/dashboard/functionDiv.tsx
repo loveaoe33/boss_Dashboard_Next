@@ -9,10 +9,11 @@ import React from 'react';
 type props = {
   setselectObjectData?: React.Dispatch<React.SetStateAction<selectObject>>; // 可選的函數來更新選擇的物件
   addTempSelectObject?:()=>void;
+  removeChart?:()=>void;
   selectObjectData:selectObject
   sqlWhere:initModalCase
 }
-export default function MainBlocks({addTempSelectObject,selectObjectData,setselectObjectData,sqlWhere}: props) {
+export default function MainBlocks({addTempSelectObject,selectObjectData,setselectObjectData,removeChart,sqlWhere}: props) {
   const showAdd_modal = () => {
     setModalOpen(true);
   }
@@ -28,7 +29,7 @@ export default function MainBlocks({addTempSelectObject,selectObjectData,setsele
         <div className="function-panel">
           <button className="btn btn-default" onClick={showAdd_modal} >➕ 新增</button>
           <button className="btn btn-secondary">✏️ 編輯</button>
-          <button className="btn btn-danger">🗑️ 刪除</button>
+          <button className="btn btn-danger"onClick={removeChart}>🗑️ 刪除</button>
           <button className="btn btn-outline">📤 匯出</button>
           <button className="btn btn-ghost">🔄 重新整理</button>
         </div>

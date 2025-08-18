@@ -11,15 +11,26 @@ const data = [
   { name: '5月', uv: 189, pv: 480, amt: 2181 },
   { name: '6月', uv: 239, pv: 380, amt: 2500 },
   { name: '7月', uv: 349, pv: 430, amt: 2100 },
+  { name: '7月', uv: 349, pv: 430, amt: 2100 },
+  { name: '7月', uv: 349, pv: 430, amt: 2100 },
+  { name: '7月', uv: 349, pv: 430, amt: 2100 },
+  { name: '7月', uv: 349, pv: 430, amt: 2100 },
+  { name: '7月', uv: 349, pv: 430, amt: 2100 },
 ];
 
+type props={
+   title: string;
+   compare: boolean;
+   compareType:string;
+   data:string;
+}
 export default function LineChartExample() {
   return (
     <LineChart
-      width={500}
-      height={300}
+      width={800}
+      height={600}
       data={data}
-      margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
+      margin={{ top: 20, right: 0, left: 0, bottom: 5 }}
     >
       <CartesianGrid strokeDasharray="3 3" />
       <XAxis dataKey="name" />

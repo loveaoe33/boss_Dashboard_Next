@@ -4,6 +4,9 @@ import "./css/bi_main.css";
 import DynamicDiv from './dynamicDiv';
 import FunctionDiv from "./functionDiv";
 import AddModal from "./modal/addModal";
+import TestChart from "./testChart";
+import TestLineChart from "./testLineChart";
+import TestRecharts from "./testRecharts";
 
 import { rectSortingStrategy } from '@dnd-kit/sortable';
 
@@ -112,6 +115,7 @@ export default function MainBlocks() {
     const compareStartDate = new Date(dates.compareStartDate);
     const compareEndDate = new Date(dates.compareEndDate);
 
+
     if (isNaN(startDate.getTime()) || isNaN(endEdate.getTime()) || isNaN(compareStartDate.getTime()) || isNaN(compareEndDate.getTime())) {
       return false; // if date Format is invalid return false
     }
@@ -124,16 +128,33 @@ export default function MainBlocks() {
 
   }
 
-  const clearSelectObject = ():void=> {
+  const clearSelectObject = (): void => {
     setselectObjectData(initialSelectObject);
   }
 
-  const addTempSelectObject = ():void=> {
-     const jsonString=JSON.stringify(selectObjectData);
-     clearSelectObject();
-     setPostJson(jsonString);
+  const addTempSelectObject = (): void => {
+    const jsonString = JSON.stringify(selectObjectData);
+    clearSelectObject();
+    setPostJson(jsonString);
 
   }
+  const handelClick = (index: number) => {
+    setSelectIndex(index);
+
+  }
+  const removeChart = () => {
+    if (selectIndex !== null) {
+      setCharts(prev => prev.filter((_, i) => i !== selectIndex));
+      setSelectIndex(null); // 刪除後清除選擇
+
+
+    }
+
+  };
+
+
+  const [charts, setCharts] = useState<string[]>(["line", "reCharts"]);
+  const [selectIndex, setSelectIndex] = useState<number | null>(null);
 
 
   const [selectObjectData, setselectObjectData] = useState<selectObject>(initialSelectObject);
@@ -221,15 +242,24 @@ export default function MainBlocks() {
             </div>
 
 
+
+
           </SortableContext>
         </DndContext>
         <div className="middle-function-body">
-          {postJson}
-          <FunctionDiv addTempSelectObject={addTempSelectObject} selectObjectData={selectObjectData} setselectObjectData={setselectObjectData} sqlWhere={sqlWhere}  />
+          <FunctionDiv addTempSelectObject={addTempSelectObject} selectObjectData={selectObjectData} setselectObjectData={setselectObjectData} removeChart={removeChart} sqlWhere={sqlWhere} />
         </div>
-        <div className="middel-chart-body">
 
-        </div>
+
+
+        {charts.map((type, index) => (
+          <div key={index} className="middel-chart-body" onClick={() => handelClick(index)}>
+            {type === "line" ? <TestLineChart /> : <TestRecharts />}
+
+          </div>
+        ))}
+
+
       </div>
 
     </>
