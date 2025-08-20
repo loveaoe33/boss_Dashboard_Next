@@ -7,6 +7,8 @@ import AddModal from "./modal/addModal";
 import TestChart from "./testChart";
 import TestLineChart from "./testLineChart";
 import TestRecharts from "./testRecharts";
+import { getDayAmount,getWeekAmount,getYearAmount,getLastYearAmount,getCaseSelectAmount  } from "../dashboard/lib/bi_lib"
+
 
 import { rectSortingStrategy } from '@dnd-kit/sortable';
 
@@ -109,6 +111,9 @@ export default function MainBlocks() {
     { id: '5', title: '年度累積營收', amount: '$123,456' },
   ]);
 
+
+
+
   const dateCompare = (dates: dateObject) => {   //compare dates
     const startDate = new Date(dates.startDate);
     const endEdate = new Date(dates.endEdate);
@@ -138,11 +143,11 @@ export default function MainBlocks() {
     setPostJson(jsonString);
 
   }
-  const handelClick = (index: number) => {
+  const handelClick = (index: number):void => {
     setSelectIndex(index);
 
   }
-  const removeChart = () => {
+  const removeChart = ():void => {
     if (selectIndex !== null) {
       setCharts(prev => prev.filter((_, i) => i !== selectIndex));
       setSelectIndex(null); // 刪除後清除選擇
@@ -151,6 +156,11 @@ export default function MainBlocks() {
     }
 
   };
+
+  const  initAmoint=async ():Promise<void>=>{
+      const testAmoint=await getDayAmount("localhost:8080/BI_Data_Controller/test2");
+
+  }
 
 
   const [charts, setCharts] = useState<string[]>(["line", "reCharts"]);

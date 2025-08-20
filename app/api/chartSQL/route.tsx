@@ -6,15 +6,35 @@ type RequestBody={
 
 // GET Method
 export async function GET(request: Request) {   //get chartSQL
-  const { searchParams } = new URL(request.url);
-  const id = searchParams.get('type') //call init amount data select;
-  const data = {
-    message: 'This is a GET response',
-    id: id || 'no-id-provided',
-    timestamp: new Date().toISOString()
-  };
+  try {
+    // 呼叫 Java API
+    const { searchParams } = new URL(request.url);
+    const url = searchParams.get('url');
+    const selectJson=searchParams.get('sqlSelect') || '';
+    const javaRes = await fetch(`${url}?sqldata=${selectJson}`, {
+      method: "GET",
+    });
 
-  return NextResponse.json(data, { status: 200 });
+    if (!javaRes.ok) {
+      throw new Error(`Java API error: ${javaRes.status}`);
+    }
+
+    const responseData = await javaRes.json();
+
+    // 回傳給前端
+    return NextResponse.json({
+      source: "Next.js API",
+      proxyUrl: url,
+      javaResponse: responseData,
+      timestamp: new Date().toISOString(),
+    });
+  } catch (error: any) {
+    return NextResponse.json(
+      { error: error.message || "Unknown error" },
+      { status: 500 }
+    );
+  }
+
 }
 
 // // POST Method
