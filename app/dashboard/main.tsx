@@ -28,7 +28,7 @@ import {
 } from '@dnd-kit/sortable';
 
 import { CSS } from '@dnd-kit/utilities';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import React from 'react';
 
 // 型別定義
@@ -157,8 +157,9 @@ export default function MainBlocks() {
 
   };
 
-  const  initAmoint=async ():Promise<void>=>{
-      const testAmoint=await getDayAmount("localhost:8080/BI_Data_Controller/test2");
+  const  initAmount=async ():Promise<void>=>{
+      const testAmoint=await getDayAmount("http://localhost:8080/BI_Data_Controller/test");
+      const testChart=await getCaseSelectAmount("http://localhost:8080/BI_Data_Controller/test2","{\"sqlSelect\":\"select * from test\"}");
 
   }
 
@@ -172,6 +173,10 @@ export default function MainBlocks() {
   const [postJson, setPostJson] = useState<string>("");
 
   const sensors = useSensors(useSensor(PointerSensor));
+
+  useEffect(() => {
+   initAmount();
+  }, []);
   return (
     <>
       {/* 側邊欄 */}

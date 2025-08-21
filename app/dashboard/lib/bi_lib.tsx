@@ -15,6 +15,8 @@ export async function getDayAmount(url: string) {
         headers: { 'Content-Type': 'application/json' },
     });
 
+    console.log("getDayAmount", respose);
+
 }
 
 
@@ -40,7 +42,7 @@ export async function getLastYearAmount(url: string) {
 
 
 export async function getCaseSelectAmount(url:string, caseJson:string) {
-    const respose = await fetch(`/api/caseAmount?url=${encodeURIComponent(url)}&sqlSelect=${encodeURIComponent(caseJson)}`, {
+    const respose = await fetch(`/api/chartSQL?url=${encodeURIComponent(url)}&sqlSelect=${encodeURIComponent(caseJson)}`, {
         method: 'GET',
         headers: { 'Content-Type': 'application/json' },
     });

@@ -32,16 +32,19 @@ export async function GET(request: Request) {   //get chartSQL
   try {
     // 呼叫 Java API
     const { searchParams } = new URL(request.url);
-    const url = searchParams.get('url');
-    const javaRes = await fetch(`${url}}`, {
+    const url:string | null = searchParams.get('url');
+    const safeUrl:string=encodeURI(url || '');
+    console.log("safeUrl", safeUrl);
+    const javaRes:any = await fetch(`${safeUrl}`, {
       method: "GET",
     });
+      console.log("safeUrl2", safeUrl);
 
     if (!javaRes.ok) {
       throw new Error(`Java API error: ${javaRes.status}`);
     }
-
-    const responseData = await javaRes.json();
+    
+    const responseData:any = await javaRes.json();
 
     // 回傳給前端
     return NextResponse.json({

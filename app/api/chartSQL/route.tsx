@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 
-type RequestBody={
+type RequestBody = {
   jsonSting: string;
 }
 
@@ -8,10 +8,14 @@ type RequestBody={
 export async function GET(request: Request) {   //get chartSQL
   try {
     // 呼叫 Java API
+
+
     const { searchParams } = new URL(request.url);
     const url = searchParams.get('url');
-    const selectJson=searchParams.get('sqlSelect') || '';
-    const javaRes = await fetch(`${url}?sqldata=${selectJson}`, {
+    const selectJson = searchParams.get('sqlSelect') || '';
+    const safeUrl: string = encodeURI(url || '');
+    const safeJson: string = encodeURI(selectJson || '');
+    const javaRes = await fetch(`${url}?sqlSelect=${safeJson}`, {
       method: "GET",
     });
 
