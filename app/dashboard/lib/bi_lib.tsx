@@ -9,13 +9,15 @@ export async function getWeekAmount(url: string) {
     });
 }
 
-export async function getDayAmount(url: string) {
-    const respose = await fetch(`/api/caseAmount?url=${encodeURIComponent(url)}`, {
+export async function getDayAmount(url: string): Promise<string> {
+
+    const respose = await fetch(`/api/totalAmount?url=${encodeURIComponent(url)}`, {
         method: 'GET',
         headers: { 'Content-Type': 'application/json' },
     });
 
-    console.log("getDayAmount", respose);
+    const data =await respose.json();
+    return data.javaResponse;
 
 }
 

@@ -3,28 +3,37 @@
 import React from 'react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from 'recharts';
 
-const data = [
-  { name: '1月', uv: 400, pv: 240, amt: 2400 },
-  { name: '2月', uv: 300, pv: 139, amt: 2210 },
-  { name: '3月', uv: 200, pv: 980, amt: 2290 },
-  { name: '4月', uv: 278, pv: 390, amt: 2000 },
-  { name: '5月', uv: 189, pv: 480, amt: 2181 },
-  { name: '6月', uv: 239, pv: 380, amt: 2500 },
-  { name: '7月', uv: 349, pv: 430, amt: 2100 },
-  { name: '7月', uv: 349, pv: 430, amt: 2100 },
-  { name: '7月', uv: 349, pv: 430, amt: 2100 },
-  { name: '7月', uv: 349, pv: 430, amt: 2100 },
-  { name: '7月', uv: 349, pv: 430, amt: 2100 },
-  { name: '7月', uv: 349, pv: 430, amt: 2100 },
-];
 
-type props={
-   title: string;
-   compare: boolean;
-   compareType:string;
-   data:string;
+
+type props = {
+  title: string;
+  compare: boolean;
+  compareType: string;
+  jsonString: string;
 }
-export default function LineChartExample() {
+export default function LineChartExample({ title, compare, compareType, jsonString }: props) {
+  const data = [
+    { name: '1月', uv: 400, pv: 240, amt: 2400 },
+    { name: '2月', uv: 300, pv: 139, amt: 2210 },
+    { name: '3月', uv: 200, pv: 980, amt: 2290 },
+    { name: '4月', uv: 278, pv: 390, amt: 2000 },
+    { name: '5月', uv: 189, pv: 480, amt: 2181 },
+    { name: '6月', uv: 239, pv: 380, amt: 2500 },
+    { name: '7月', uv: 349, pv: 430, amt: 2100 },
+    { name: '7月', uv: 349, pv: 430, amt: 2100 },
+    { name: '7月', uv: 349, pv: 430, amt: 2100 },
+    { name: '7月', uv: 349, pv: 430, amt: 2100 },
+    { name: '7月', uv: 349, pv: 430, amt: 2100 },
+    { name: '7月', uv: 349, pv: 430, amt: 2100 },
+  ];
+
+  const [amountData, setAmountdata] = React.useState(() => ({
+    title,
+    compare,
+    compareType,
+    jsonString,
+  }));
+
   return (
     <LineChart
       width={800}

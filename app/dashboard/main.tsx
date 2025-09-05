@@ -7,7 +7,7 @@ import AddModal from "./modal/addModal";
 import TestChart from "./testChart";
 import TestLineChart from "./testLineChart";
 import TestRecharts from "./testRecharts";
-import { getDayAmount,getWeekAmount,getYearAmount,getLastYearAmount,getCaseSelectAmount  } from "../dashboard/lib/bi_lib"
+import { getDayAmount, getWeekAmount, getYearAmount, getLastYearAmount, getCaseSelectAmount } from "../dashboard/lib/bi_lib"
 
 
 import { rectSortingStrategy } from '@dnd-kit/sortable';
@@ -38,6 +38,22 @@ type Block = {
   amount: string;
   color?: string;
 };
+
+
+type ChartSelect = {
+  title: string;
+  compare: boolean;
+  compareType: string;
+  jsonString: string;
+};
+
+
+type ChartItem={
+  type:string
+  props:ChartSelect
+
+}
+
 
 // SortableItem 支援 children 的版本
 function SortableItem({ id, children }: { id: string; children: React.ReactNode }) {
@@ -97,19 +113,16 @@ export const initialSelectObject: selectObject = {
 };
 
 export const initalModalCase: initModalCase = {
-  checkbox: ["A", "B", "C"],
+  checkbox: ["純自費收益", "健保與自費收益", "門診", "住院", "醫師"],
   chartType: ["line", "bar", "pie"]
 }
 
 // 主組件
 export default function MainBlocks() {
-  const [blocks, setBlocks] = useState<Block[]>([
-    { id: '1', title: '今日營收555', amount: '$12,345' },
-    { id: '2', title: '本週營收', amount: '$67,890' },
-    { id: '3', title: '本月累積營收', amount: '$123,456' },
-    { id: '4', title: '上月累積營收', amount: '$123,456' },
-    { id: '5', title: '年度累積營收', amount: '$123,456' },
-  ]);
+
+
+  const [initAmounts, setInitAmounts] = useState<string[]>([]);
+  const [blocks, setBlocks] = useState<Block[]>([]);
 
 
 
@@ -137,46 +150,82 @@ export default function MainBlocks() {
     setselectObjectData(initialSelectObject);
   }
 
-  const addTempSelectObject = (): void => {
+  const addTempSelectObject = async (): Promise<void> => {
     const jsonString = JSON.stringify(selectObjectData);
     clearSelectObject();
+    const testChart = await getCaseSelectAmount("http://localhost:8080/BI_Data_Controller/test2", jsonString);
     setPostJson(jsonString);
 
   }
-  const handelClick = (index: number):void => {
+  const handelClick = (index: number): void => {
     setSelectIndex(index);
 
   }
-  const removeChart = ():void => {
+  const removeChart = (): void => {
     if (selectIndex !== null) {
       setCharts(prev => prev.filter((_, i) => i !== selectIndex));
       setSelectIndex(null); // 刪除後清除選擇
-
-
     }
-
   };
 
-  const  initAmount=async ():Promise<void>=>{
-      const testAmoint=await getDayAmount("http://localhost:8080/BI_Data_Controller/test");
-      const testChart=await getCaseSelectAmount("http://localhost:8080/BI_Data_Controller/test2","{\"sqlSelect\":\"select * from test\"}");
+  const initAmount = async (): Promise<void> => {
+    const testAmoint = await getDayAmount("http://localhost:8080/BI_Data_Controller/initAmountData");
+    const parts = testAmoint.split("_");
+    console.log(parts);
+    setInitAmounts(parts);
+    console.log(initAmounts);
+    const testChart = await getCaseSelectAmount("http://localhost:8080/BI_Data_Controller/test2", "{\"sqlSelect\":\"select * from test\"}");
+  }
+  const chartsComponents: Record<string, (props: ChartSelect) => JSX.Element> = {
+    line: (props) => <TestLineChart
+      {...props}
+    />,
+    reCharts: (props) => <TestRecharts
+      {...props} />,
+    Chart: (props) => <TestChart
+      {...props} />,
 
   }
-
-
-  const [charts, setCharts] = useState<string[]>(["line", "reCharts"]);
+  const [charts, setCharts] = useState<ChartItem[]>([{
+    type: "line",
+    props: {
+      title: "第一張圖",
+      compare: true,
+      compareType: "month",
+      jsonString: '{"x":[1,2,3]}',
+    },
+  },
+  {
+    type: "reCharts",
+    props: {
+      title: "第二張圖",
+      compare: false,
+      compareType: "year",
+      jsonString: '{"x":[10,20,30]}',
+    },
+  },
+]);
   const [selectIndex, setSelectIndex] = useState<number | null>(null);
-
-
   const [selectObjectData, setselectObjectData] = useState<selectObject>(initialSelectObject);
   const [sqlWhere, setSqlWhere] = useState<initModalCase>(initalModalCase);
   const [postJson, setPostJson] = useState<string>("");
-
   const sensors = useSensors(useSensor(PointerSensor));
 
   useEffect(() => {
-   initAmount();
+    initAmount();
   }, []);
+  useEffect(() => {
+    console.log("initAmounts 更新後:", initAmounts);
+    setBlocks([
+      { id: '1', title: '今日應收累計', amount: `$ ${initAmounts[2]}` },
+      { id: '2', title: '本月應收累計', amount: `$ ${initAmounts[1]}` },
+      { id: '3', title: '本年應收累計', amount: `$ ${initAmounts[0]}` },
+      { id: '4', title: '本年實收累計', amount: `$ ${initAmounts[4]}` },
+      { id: '5', title: '去年應收累計', amount: `$ ${initAmounts[3]}` },
+    ])
+  }, [initAmounts]);
+
+
   return (
     <>
       {/* 側邊欄 */}
@@ -261,6 +310,7 @@ export default function MainBlocks() {
 
           </SortableContext>
         </DndContext>
+
         <div className="middle-function-body">
           <FunctionDiv addTempSelectObject={addTempSelectObject} selectObjectData={selectObjectData} setselectObjectData={setselectObjectData} removeChart={removeChart} sqlWhere={sqlWhere} />
         </div>
@@ -269,12 +319,9 @@ export default function MainBlocks() {
 
         {charts.map((type, index) => (
           <div key={index} className="middel-chart-body" onClick={() => handelClick(index)}>
-            {type === "line" ? <TestLineChart /> : <TestRecharts />}
-
+            {chartsComponents[type.type]?.(type.props) ?? "無開放此圖"}
           </div>
         ))}
-
-
       </div>
 
     </>

@@ -38,7 +38,25 @@ const initialTasks: Task[] = [
   },
 ];
 
-export default function ChartPage() {
+
+type props = {
+  title: string;
+  compare: boolean;
+  compareType: string;
+  jsonString: string;
+}
+
+
+export default function ChartPage({ title, compare, compareType, jsonString }: props) {
+
+
+  const [amountData, setAmountdata] = React.useState(() => ({
+    title,
+    compare,
+    compareType,
+    jsonString,
+  }));
+
   const [tasks, setTasks] = useState<Task[]>(initialTasks);
 
   const handleDateChange = (task: Task, start: Date, end: Date) => {

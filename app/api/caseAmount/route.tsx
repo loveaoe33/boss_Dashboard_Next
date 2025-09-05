@@ -28,8 +28,12 @@ export interface ReasponseLogin {
 // }
 
 
-export async function GET(request: Request) {   //get chartSQL
+export async function GET(request: Request) {   //get init Amount
+          console.log("getDayAmount456");
+
   try {
+        console.log("getDayAmount456");
+
     // 呼叫 Java API
     const { searchParams } = new URL(request.url);
     const url:string | null = searchParams.get('url');

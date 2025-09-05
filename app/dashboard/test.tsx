@@ -63,11 +63,10 @@ function SortableItem({ id, children }: { id: string; children: React.ReactNode 
 // 主組件
 export default function MainBlocks() {
   const [blocks, setBlocks] = useState<Block[]>([
-    { id: '1', title: '今日營收55555', amount: '$12,345' },
-    { id: '2', title: '本週營收', amount: '$67,890'  },
-    { id: '3', title: '本月累積營收', amount: '$123,456' },
-    { id: '4', title: '上月累積營收', amount: '$98,765' },
-    { id: '5', title: '年度累積營收', amount: '$456,789' },
+    { id: '1', title: '今日營收', amount: '$12,345' },
+    { id: '2', title: '本月累積營收', amount: '$123,456' },
+    { id: '3', title: '本年累積營收', amount: '$67,890' },
+    { id: '4', title: '去年累積營收', amount: '$98,765' },
   ]);
 
   const sensors = useSensors(useSensor(PointerSensor));
