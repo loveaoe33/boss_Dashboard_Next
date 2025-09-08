@@ -48,9 +48,9 @@ type ChartSelect = {
 };
 
 
-type ChartItem={
-  type:string
-  props:ChartSelect
+type ChartItem = {
+  type: string
+  props: ChartSelect
 
 }
 
@@ -127,34 +127,40 @@ export default function MainBlocks() {
 
 
 
-  const dateCompare = (dates: dateObject) => {   //compare dates
-    const startDate = new Date(dates.startDate);
-    const endEdate = new Date(dates.endEdate);
-    const compareStartDate = new Date(dates.compareStartDate);
-    const compareEndDate = new Date(dates.compareEndDate);
+  const dateCompare = (dates: dateObject) => {
+    const { startDate, endEdate, compareStartDate, compareEndDate } = dates;
+    const toDate = (d: string) => new Date(d);
 
+    const start = toDate(startDate);
+    const end = toDate(endEdate);
 
-    if (isNaN(startDate.getTime()) || isNaN(endEdate.getTime()) || isNaN(compareStartDate.getTime()) || isNaN(compareEndDate.getTime())) {
-      return false; // if date Format is invalid return false
+    if (isNaN(start.getTime()) || isNaN(end.getTime()) || start > end) return false;
+
+    if (selectObjectData.compareRadio === "otherYear") {
+      const cStart = toDate(compareStartDate);
+      const cEnd = toDate(compareEndDate);
+      if (isNaN(cStart.getTime()) || isNaN(cEnd.getTime()) || cStart > cEnd) return false;
     }
 
-    // 檢查起始日期不能大於結束日期
-    if (startDate > endEdate) return false;
-    if (compareStartDate > compareEndDate) return false;
-
-    return true; // 通過檢查
-
-  }
+    return true;
+  };
 
   const clearSelectObject = (): void => {
     setselectObjectData(initialSelectObject);
   }
 
   const addTempSelectObject = async (): Promise<void> => {
-    const jsonString = JSON.stringify(selectObjectData);
-    clearSelectObject();
-    const testChart = await getCaseSelectAmount("http://localhost:8080/BI_Data_Controller/test2", jsonString);
-    setPostJson(jsonString);
+    if (dateCompare(selectObjectData.compareType)) {
+      const jsonString = JSON.stringify(selectObjectData);
+      clearSelectObject();
+      const testChart = await getCaseSelectAmount("http://localhost:8080/BI_Data_Controller/test2", jsonString);
+      setPostJson(jsonString);
+
+    } else {
+
+      alert("false");
+    }
+
 
   }
   const handelClick = (index: number): void => {
@@ -204,7 +210,7 @@ export default function MainBlocks() {
       jsonString: '{"x":[10,20,30]}',
     },
   },
-]);
+  ]);
   const [selectIndex, setSelectIndex] = useState<number | null>(null);
   const [selectObjectData, setselectObjectData] = useState<selectObject>(initialSelectObject);
   const [sqlWhere, setSqlWhere] = useState<initModalCase>(initalModalCase);
