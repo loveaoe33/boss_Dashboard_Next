@@ -95,6 +95,25 @@ const modalView = ({ addTempSelectObject, selectObjectData, setselectObjectData,
     }
   };
 
+  const handleAmountRadioChange = (value: string) => {
+    if (setselectObjectData) {
+      setselectObjectData({
+        ...selectObjectData,
+        amountCase: value,
+      });
+    }
+  };
+
+
+  const handleOuLldCaseRadioChange = (value: string) => {
+    if (setselectObjectData) {
+      setselectObjectData({
+        ...selectObjectData,
+        ouLldCase: value,
+      });
+    }
+  };
+
 
 
   const handleDateChange = (field: keyof dateObject, value: string) => {
@@ -148,8 +167,50 @@ const modalView = ({ addTempSelectObject, selectObjectData, setselectObjectData,
             <h2>多時間比較 + 日期區間 + 圖表範例</h2>
 
             <div className="addModal-controls">
+
               <div className="addModal-filter-section">
-                <h3>選擇條件 (模擬 SQL WHERE)</h3>
+                <h3>收益選擇</h3>
+
+                {sqlWhere.amountCase.map((radio) => (
+
+                  <label key={radio}>
+                    <label><input type="radio" name="amountCase" // 一組互斥的關鍵
+                      value={radio}
+                      checked={selectObjectData.amountCase === radio}
+                      onChange={(e) => handleAmountRadioChange(e.target.value)} />{radio}</label>
+
+
+                  </label>
+                ))}
+
+              </div>
+
+
+
+
+              <div className="addModal-filter-section">
+                <h3>門/住診選擇</h3>
+
+                {sqlWhere.ouLldCase.map((radio) => (
+
+                  <label key={radio}>
+                    <label><input type="radio" name="ouLldCase" // 一組互斥的關鍵
+                      value={radio}
+                      checked={selectObjectData.ouLldCase === radio}
+                      onChange={(e) => handleOuLldCaseRadioChange(e.target.value)} />{radio} </label>
+
+                  </label>
+                ))}
+
+                {/* <label><input type="checkbox" value="A" checked /> 類別 A</label>
+                <label><input type="checkbox" value="B" checked /> 類別 B</label>
+                <label><input type="checkbox" value="C" checked /> 類別 C</label>
+                <label><input type="checkbox" value="D" checked /> 類別 D</label> */}
+              </div>
+
+
+              <div className="addModal-filter-section">
+                <h3>附加條件 (模擬 SQL WHERE)</h3>
 
                 {sqlWhere.checkbox.map((checkbox) => (
 
@@ -184,7 +245,7 @@ const modalView = ({ addTempSelectObject, selectObjectData, setselectObjectData,
 
               <div className="addModal-filter-section" style={{ flex: "1 1 300px" }}>
                 <h3>比較設定</h3>
-                <label><input type="radio" id="comparelocalYear" value="localYear" checked={selectObjectData.compareRadio === "localYear"} onChange={(e) => handleCompareRadioChange(e.target.value)} /> 月份成長圖-(選主區間即可)</label>
+                <label><input type="radio" id="compareLocalYear" value="localYear" checked={selectObjectData.compareRadio === "localYear"} onChange={(e) => handleCompareRadioChange(e.target.value)} /> 月份成長圖-(選主區間即可)</label>
                 <label><input type="radio" id="compareLastYear" value="lastYear" checked={selectObjectData.compareRadio === "lastYear"} onChange={(e) => handleCompareRadioChange(e.target.value)} /> 比較去年-(選主區間即可)</label>
                 <label><input type="radio" id="compareOtherDate" value="otherYear" checked={selectObjectData.compareRadio === "otherYear"} onChange={(e) => handleCompareRadioChange(e.target.value)} /> 比較其他日期-(主、副區間選擇)</label>
                 <div>
@@ -193,14 +254,14 @@ const modalView = ({ addTempSelectObject, selectObjectData, setselectObjectData,
 
 
                     <input type="date" value={selectObjectData.compareType.startDate} onChange={(e) => handleDateChange("startDate", e.target.value)} id="dateFrom" />
-                    <input type="date" value={selectObjectData.compareType.endEdate} onChange={(e) => handleDateChange("endEdate", e.target.value)} id="dateTo"  />
+                    <input type="date" value={selectObjectData.compareType.endEdate} onChange={(e) => handleDateChange("endEdate", e.target.value)} id="dateTo" />
                   </div>
                 </div>
                 <div>
                   <label>其他日期區間 (比較用)：</label>
                   <div className="date-range">
-                    <input type="date" id="otherDateFrom" onChange={(e) => handleDateChange("compareStartDate", e.target.value)} value={selectObjectData.compareType.compareStartDate} disabled={selectObjectData.compareRadio!=="otherYear"}/>
-                    <input type="date" id="otherDateTo" onChange={(e) => handleDateChange("compareEndDate", e.target.value)} value={selectObjectData.compareType.compareEndDate} disabled={selectObjectData.compareRadio!=="otherYear"}/>
+                    <input type="date" id="otherDateFrom" onChange={(e) => handleDateChange("compareStartDate", e.target.value)} value={selectObjectData.compareType.compareStartDate} disabled={selectObjectData.compareRadio !== "otherYear"} />
+                    <input type="date" id="otherDateTo" onChange={(e) => handleDateChange("compareEndDate", e.target.value)} value={selectObjectData.compareType.compareEndDate} disabled={selectObjectData.compareRadio !== "otherYear"} />
                   </div>
                 </div>
               </div>

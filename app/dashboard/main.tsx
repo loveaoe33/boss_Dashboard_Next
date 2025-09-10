@@ -87,6 +87,8 @@ export type dateObject = {
 }
 
 export type selectObject = {
+  amountCase: string,
+  ouLldCase: string,
   sqlCheckbox: string[];
   chartType: string;
   compareRadio: string;
@@ -94,6 +96,8 @@ export type selectObject = {
 }
 
 export type initModalCase = {
+  amountCase: string[];
+  ouLldCase: string[];
   checkbox: string[];
   chartType: string[];
 }
@@ -101,6 +105,8 @@ export type initModalCase = {
 
 
 export const initialSelectObject: selectObject = {
+  amountCase: "",
+  ouLldCase: "",
   sqlCheckbox: [],
   chartType: "",
   compareRadio: "",
@@ -113,7 +119,9 @@ export const initialSelectObject: selectObject = {
 };
 
 export const initalModalCase: initModalCase = {
-  checkbox: ["純自費收益", "健保與自費收益", "門診", "住院", "醫師"],
+  amountCase: ["健保加自費應收","健保應收","自費實收"],
+  ouLldCase: ["門診", "住診"],
+  checkbox: ["醫師"],
   chartType: ["line", "bar", "pie"]
 }
 
@@ -150,6 +158,11 @@ export default function MainBlocks() {
   }
 
   const addTempSelectObject = async (): Promise<void> => {
+    if (selectObjectData.amountCase === "" || selectObjectData.ouLldCase === "") {
+      alert("請選擇收益或門診/住院條件");
+      return;
+    }
+
     if (dateCompare(selectObjectData.compareType)) {
       const jsonString = JSON.stringify(selectObjectData);
       clearSelectObject();
@@ -159,6 +172,7 @@ export default function MainBlocks() {
     } else {
 
       alert("false");
+      return;
     }
 
 

@@ -5,7 +5,7 @@
     background: #f9f9f9;
   }
   .addModal-container {
-    max-width: 960px;
+    max-width: 1500px;
     margin: 30px auto;
     background: white;
     padding: 20px;
@@ -60,7 +60,7 @@
 
 
   .addModal-modal {
-  width: 1000px;
+  width: 1500px;
   height: 600px;
   max-width: 90vw; /* 讓它在螢幕太小時自適應 */
   max-height: 90vh;
